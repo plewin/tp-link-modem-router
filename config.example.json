@@ -1,0 +1,12 @@
+{
+    "url": "http://192.168.1.1",
+    "login": "admin",
+    "password": "myrouterpassword",
+    "api_listen_host": "127.0.0.1",
+    "api_listen_port": 3000,
+    "api_users": { "apiuser": "pleasechangeme" },
+    "api_client_url": "http://localhost:3000",
+    "api_client_login": "apiuser",
+    "api_client_password": "pleasechangeme",
+    "api_client_polling_delay": 5000
+}
