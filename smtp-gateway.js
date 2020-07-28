@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from 'fs'
 import minimist from 'minimist'
 import smtpServerLib from 'smtp-server';
@@ -78,6 +79,10 @@ const server = new smtpServerLib.SMTPServer({
 
       let content;
       streamToString(stream)
+        .then(string => {
+          logger.info("Received SMTP payload", {smtpPayload: string});
+          return string;
+        })
         .then(string => mailparser.simpleParser(string, {}))
         .then(result => sendSms(destNumber, content = result.text.trim()))
         .then(() => {
