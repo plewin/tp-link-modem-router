@@ -8,5 +8,11 @@
     "api_client_url": "http://localhost:3000",
     "api_client_login": "apiuser",
     "api_client_password": "pleasechangeme",
-    "api_client_polling_delay": 5000
+    "api_client_polling_delay": 5000,
+    "sms_gateway_url": "http://localhost:3000",
+    "sms_gateway_login": "apiuser",
+    "sms_gateway_password": "pleasechangeme",
+    "sms_gateway_domain": "smtp2sms.local",
+    "sms_gateway_listen_host": "127.0.0.1",
+    "sms_gateway_listen_port": 1025
 }

@@ -7,10 +7,10 @@
 * Easy to use script to send SMS
 * Easy to use script to receive SMS
 * REST API bridge for managing and sending SMS
+* SMTP to SMS gateway
 
 ### Planned
 
-- SMTP to SMS gateway
 - Docker
 - Prometheus endpoint
 
@@ -108,7 +108,22 @@ curl --user apiuser:pleasechangeme -d '{"to":"0123456789", "content":"test2"}' -
 }
 ```
 
+### SMTP to SMS Gateway
 
+```bash
+# Start listening for emails
+
+
+# Sample config file for smtp-gateway.js
+{
+    "sms_gateway_url": "http://localhost:3000",
+    "sms_gateway_login": "apiuser",
+    "sms_gateway_password": "pleasechangeme",
+    "sms_gateway_domain": "smtp2sms.local",
+    "sms_gateway_listen_host": "127.0.0.1",
+    "sms_gateway_listen_port": 1025
+}
+```
 
 ## Supported models
 
