@@ -125,6 +125,36 @@ curl --user apiuser:pleasechangeme -d '{"to":"0123456789", "content":"test2"}' -
 }
 ```
 
+```bash
+# SMTP Example
+curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-file <(echo "\n\nHello world from curl\n\n")
+```
+
+```
+*   Trying 127.0.0.1:1025...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to 127.0.0.1 (127.0.0.1) port 1025 (#0)
+< 220 dom0 ESMTP SMTP gateway for SMS API
+> EHLO 11
+< 250-dom0 Nice to meet you, [127.0.0.1]
+< 250-PIPELINING
+< 250-8BITMIME
+< 250-SMTPUTF8
+< 250-AUTH LOGIN PLAIN
+< 250 STARTTLS
+> MAIL FROM:<>
+< 250 Accepted
+> RCPT TO:<123456789@smtp2sms.local>
+< 250 Accepted
+> DATA
+< 354 End data with <CR><LF>.<CR><LF>
+} [26 bytes data]
+< 250 OK: message queued
+100    26    0     0    0    26      0     49 --:--:-- --:--:-- --:--:--    49
+* Connection #0 to host 127.0.0.1 left intact
+```
+
 ## Supported models
 
 * TP-Link Archer MR600
