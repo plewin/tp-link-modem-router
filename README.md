@@ -127,7 +127,7 @@ curl --user apiuser:pleasechangeme -d '{"to":"0123456789", "content":"test2"}' -
 
 ```bash
 # SMTP Example
-curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-file <(echo "\n\nHello world from curl\n\n")
+curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-file <(echo && echo -n "Hello world from curl")
 ```
 
 ```
