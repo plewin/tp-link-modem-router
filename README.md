@@ -112,7 +112,7 @@ curl --user apiuser:pleasechangeme -d '{"to":"0123456789", "content":"test2"}' -
 
 ```bash
 # Start listening for emails
-
+./smtp-gateway.js --config=/tmp/config.json
 
 # Sample config file for smtp-gateway.js
 {
