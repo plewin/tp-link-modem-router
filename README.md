@@ -158,6 +158,8 @@ curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-fil
 ## Supported models
 
 * TP-Link Archer MR600
+* TP-Link TL-MR6400 v5
+    * Firmware Version : 1.1.0 0.9.1 v0001.0 Build 200511 Rel.43036n
 
 ## Common errors
 
