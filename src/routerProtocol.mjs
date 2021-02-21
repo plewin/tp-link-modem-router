@@ -136,6 +136,7 @@ class RouterProtocol {
     let ret = '';
     for (let key in obj) {
       if (obj[key] || 0 === obj[key] || '' === obj[key]) {
+        obj[key] = typeof(obj[key]) === 'string' ? obj[key].split("\n").join("\x12") : obj[key]
         ret += key + keyValueSeparator + obj[key] + lineSeparator;
       } else {
         ret += key + lineSeparator;
