@@ -281,8 +281,8 @@ router.post('/outbox', async function (req, res) {
     return;
   }
 
-  const to = req.body.to.replace(/(\r\n|\n|\r)/gm, "\u0012");
-  const content = req.body.content.replace(/(\r\n|\n|\r)/gm, "\u0012");
+  const to = req.body.to;
+  const content = req.body.content;
   const client = req.app.get('router_client');
 
   const payloadSendSms = {
