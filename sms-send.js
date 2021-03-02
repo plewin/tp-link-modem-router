@@ -106,10 +106,12 @@ function verify_submission(result) {
 }
 
 function verify_submission_result(result) {
-  //TODO sendResult=3 means queued or processing ??
   if (result.error === 0 && result.data[0]['sendResult'] === 1) {
-    console.log("Great! SMS sent succesfully");
+    console.log("Great! SMS sent successfully");
+  } else if (result.error === 0 && result.data[0]['sendResult'] === 3) {
+    //TODO sendResult=3 means queued or processing ??
+    console.log("Warning: SMS sending was accepted but not yet processed.");
   } else {
-    console.log("Error! SMS could not be sent by router");
+    console.log("Error: SMS could not be sent by router");
   }
 }
