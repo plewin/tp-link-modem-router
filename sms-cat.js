@@ -56,6 +56,7 @@ class SmsPoller {
     };
   }
 
+  // noinspection InfiniteRecursionJS
   async poll() {
     let continueWhile = true;
     let response;
@@ -71,13 +72,13 @@ class SmsPoller {
       }
     }
     
-    if (response.status == 502) {
+    if (response.status === 502) {
       // Status 502 is a connection timeout error,
       // may happen when the connection was pending for too long,
       // and the remote server or a proxy closed it
       // let's reconnect
       await this.poll();
-    } else if (response.status != 200) {
+    } else if (response.status !== 200) {
       // An error - let's show it
       logger.notice("Received abnormal response " + response.statusText);
       // Reconnect in one second
@@ -107,9 +108,8 @@ class SmsPoller {
   async processUnreadSms(unreadSms) {
     const start = async () => {
       await this.asyncForEach(unreadSms, async (element) => {
-        let response;
         try {
-          response = await axios.patch(this.url + "/api/v1/sms/inbox/" + element.order, null, this.axiosConfig);
+          await axios.patch(this.url + "/api/v1/sms/inbox/" + element.order, null, this.axiosConfig);
         } catch(exception) {
           // catch network errors
           logger.error("Error while processing SMS. " + exception.message);
@@ -144,4 +144,4 @@ const poller = new SmsPoller({
   password: config.api_client_password,
 }, on_sms_received);
 
-poller.poll();
+await poller.poll();

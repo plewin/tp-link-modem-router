@@ -40,11 +40,11 @@ class RouterClient {
       // authenticate with user / password
       .then(_ => this.authenticate())
       // extract and store session cookie
-      .then(response => this.extractSessionIdFromAuthenticationReponse(response))
+      .then(response => this.extractSessionIdFromAuthenticationResponse(response))
       // we need to fetch a token for remote command
       .then(_ => this.fetchTokenId())
       // extract and store token header
-      .then(response => this.extractTokenIdFromReponse(response))
+      .then(response => this.extractTokenIdFromResponse(response))
       .then(() => logger.info('api_bridge.connect.success'))
     ;
   }
@@ -57,7 +57,7 @@ class RouterClient {
   fetchEncryptionParams() {
     // POST without data
     const parmUrl = this.url + '/cgi/getParm';
-    return httpClient.post(parmUrl, null, {
+    return this.httpClient.post(parmUrl, null, {
       headers: {
         "Referer": this.url, // we need a referer to pass referer check
       },
@@ -102,7 +102,7 @@ class RouterClient {
     this.encryption.setRSAKey(encryptionSettings.nn, encryptionSettings.ee);
     this.encryption.genAESKey();
 
-    // priting these generated values so we can decrypt response manually for debugging
+    // printing these generated values so we can decrypt response manually for debugging
     logger.info("Generated AES: ", {aes: this.encryption.getAESKeyString()});
   }
 
@@ -115,7 +115,7 @@ class RouterClient {
     logger.info("Sending authentication payload", auth);
 
     const loginUrl = this.url + '/cgi/login?data=' + encodeURIComponent(auth.data) + '&sign=' + auth.sign + '&Action=1&LoginStatus=0';
-    return httpClient.post(loginUrl, null, {
+    return this.httpClient.post(loginUrl, null, {
       headers: {
           "Referer": this.url, // we need a referer to pass referer check
       },
@@ -129,7 +129,7 @@ class RouterClient {
   /**
    * Extract the cookie from response headers of an authentication response
    */
-  extractSessionIdFromAuthenticationReponse(response) {
+  extractSessionIdFromAuthenticationResponse(response) {
     const setCookieHeader = response.headers['set-cookie'][0];
     const sessionIdRegex = /JSESSIONID=([a-f0-9]+)/;
     this.sessionId = setCookieHeader.match(sessionIdRegex)[1];
@@ -142,7 +142,7 @@ class RouterClient {
   fetchTokenId() {
     // fetch the homepage now that we have the cookie
     const homeUrl = this.url + "/";
-    return httpClient.get(homeUrl, {
+    return this.httpClient.get(homeUrl, {
       headers: {
         "Referer": this.url, // we need a referer to pass referer check
         "Cookie": "loginErrorShow=1; JSESSIONID=" + this.sessionId, // JSESSIONID required to get the homepage with the tokenid
@@ -150,7 +150,7 @@ class RouterClient {
     });
   }
 
-  extractTokenIdFromReponse(response) {
+  extractTokenIdFromResponse(response) {
     // extract token id from response content
     const tokenIdRegex = /var token="([a-f0-9]+)"/;
     this.tokenId = response.data.match(tokenIdRegex)[1];
@@ -174,7 +174,7 @@ class RouterClient {
     const encryptedPayload = this.encryptDataFrame(dataFrame);
     
     const cgiUrl = this.url + "/cgi_gdpr";
-    return httpClient.post(cgiUrl, encryptedPayload, {
+    return this.httpClient.post(cgiUrl, encryptedPayload, {
       headers: {
         "Referer": this.url,
         "Cookie": "loginErrorShow=1; JSESSIONID=" + this.sessionId,
@@ -182,14 +182,13 @@ class RouterClient {
         "Content-Type": 'text/plain',
       }
     }).then(response => {
-        const decryptedPayload = this.encryption.AESDecrypt(response.data);
-        const decodedPayload = this.protocol.fromDataFrame(decryptedPayload);
-        const prettyPayload = this.protocol.prettifyResponsePayload(decodedPayload);
-        return prettyPayload;
+      const decryptedPayload = this.encryption.AESDecrypt(response.data);
+      const decodedPayload = this.protocol.fromDataFrame(decryptedPayload);
+      return this.protocol.prettifyResponsePayload(decodedPayload);
     }).catch((exception) => {
       // highly possible we got logout by inactivity or admin logged himself on UI
       // when our token/cookie becomes invalid all our next commands give 500
-      if (exception.message == 'Request failed with status code 500' && allowReconnectionOnError == true) {
+      if (exception.message === 'Request failed with status code 500' && allowReconnectionOnError === true) {
         this.reset();
         return this.execute(request, false);
       } else {

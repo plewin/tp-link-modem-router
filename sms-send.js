@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Send SMS via tplink mr600
+// Send SMS via router
 
 import fs from 'fs'
 import minimist from 'minimist'
@@ -17,7 +17,7 @@ const argv = minimist(process.argv.slice(2), {
   string: '_', // prevent string to number conversion
 });
 
-if (argv['_'].length != 2) {
+if (argv['_'].length !== 2) {
   console.error('This command requires 2 arguments, a number and a string text message');
   console.error('Example: $self --url="http://192.168.1.1" --login=admin --password=myrouterpassword 0612345678 "my text message"');
   console.error('Example: $self --config=/tmp/config.json 0612345678 "my text message"');
@@ -94,14 +94,13 @@ client
     console.log(error);
     process.exit(1);
   });
-;
 
 function verify_submission(result) {
   if (result.error === 0) {
     console.log("Great! SMS send operation was accepted.")
   } else {
     // hopefully we will never have this error
-    throw new 'SMS send operation was not accepted';
+    throw new Error('SMS send operation was not accepted');
   }
 }
 

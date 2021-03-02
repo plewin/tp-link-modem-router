@@ -51,7 +51,7 @@ class RSAKey {
       logger.error('Message too long for RSA');
       return null;
     }
-    let byteArray = new Array();
+    let byteArray = [];
     let i = 0;
     let j = 0;
     while (i < s.length && j < n) {

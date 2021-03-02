@@ -3,6 +3,7 @@ let TP_ACT = {
   ACT_SET: 2,
   ACT_DEL: 4,
   ACT_GL: 5, // get list
+  ACT_GS: 6,
   ACT_CGI: 8,
 }
 
@@ -27,7 +28,7 @@ class RouterProtocol {
     let sections = payload.map(payload => {
       let attrs = payload.attrs;
   
-      const stack = payload.stack != undefined ? payload.stack : '0,0,0,0,0,0';
+      const stack = payload.stack !== undefined ? payload.stack : '0,0,0,0,0,0';
       const pStack = '0,0,0,0,0,0'; // not used
       attrs = this.toKv(attrs);
     
@@ -124,7 +125,7 @@ class RouterProtocol {
         } else if (dateTypedAttributes.includes(key)) {
           payload.data[index][key] = new Date(payload.data[index][key]);
         } else if (stringTypedAttributes.includes(key)) {
-          payload.data[index][key] = payload.data[index][key].replace(/\u0012/gm, "\n");;
+          payload.data[index][key] = payload.data[index][key].replace(/\u0012/gm, "\n");
         }
       });
     })
