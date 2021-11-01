@@ -172,3 +172,5 @@ HTTP 403 while sending SMS or using API bridge
 
 * https://github.com/McMlok/DomoticzToRouterSmsBot
 * https://github.com/jonscheiding/tplink-vpn-ddns
+* https://github.com/jeedom/plugin-tplinksms
+* https://github.com/mehmetbeyHZ/tp-link-m7200-api
