@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM node:lts-alpine
 WORKDIR /home/node
 RUN apk --no-cache add curl
