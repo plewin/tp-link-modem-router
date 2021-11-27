@@ -9,11 +9,6 @@
 * REST API bridge for managing and sending SMS
 * SMTP to SMS gateway
 
-### Planned
-
-- Docker
-- Prometheus endpoint
-
 ## Installation and requirements
 
 You need `nodejs` and `yarn`. Install them first.
@@ -168,9 +163,36 @@ curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-fil
 HTTP 403 while sending SMS or using API bridge
 : You might want to double check that the password supplied is correct and that you call the script from the same network/subnet as the router.
 
+## Development and debugging the router's protocol
+
+To debug the interaction between your browser and the router, first log in on the router UI and then paste this code in the developer console of your browser.
+All traffic will be logged in plain text in the console.
+
+```javascript
+$.Iencryptor.AESDecrypt_backup = $.Iencryptor.AESDecrypt;
+$.Iencryptor.AESEncrypt_backup = $.Iencryptor.AESEncrypt;
+$.Iencryptor.AESDecrypt = function(data) {
+	let decrypted = $.Iencryptor.AESDecrypt_backup(data);
+	console.log("RECV:\n" + decrypted);
+	return decrypted;
+}
+$.Iencryptor.AESEncrypt = function(data) {
+	console.log("SEND:\n" + data);
+	return $.Iencryptor.AESEncrypt_backup(data);
+}
+```
+
 ### Alternatives and projects of interest
 
+I can offer no guarantees about the following projects
+
+* https://github.com/hercule115/TPLink-Archer
+  * Python command line tool to dump MR600 router config and update dynamic DNS
+* https://github.com/jeedom/plugin-tplinksms
+  * Plugin for Jeedom that provides an UI
+* https://github.com/mehmetbeyHZ/tp-link-m7200-api
+  * PHP library for TP-Link M7000 range of products
 * https://github.com/McMlok/DomoticzToRouterSmsBot
 * https://github.com/jonscheiding/tplink-vpn-ddns
-* https://github.com/jeedom/plugin-tplinksms
-* https://github.com/mehmetbeyHZ/tp-link-m7200-api
+
+
