@@ -93,7 +93,7 @@
  *      description:
  *        Returns a list of the last 8 received SMS, optionally filtered by unread status, sorted by most recent first.
  *        Only the last 8 elements are reported because the bridge does not support pagination at the router's end.
- * 
+ *
  *        Messages could be missed if this endpoint is polled and more than 8 messages are received. To poll messages
  *        from this endpoint without missing any, one should poll with filter unread=true and mark already read SMS using a PATCH request.
  *
@@ -164,6 +164,17 @@
  *          application/x-www-form-urlencoded:
  *            schema:
  *              $ref: '#/components/schemas/OutboxNewSms'
+ *  /sms/outbox/{smsOrderNumber}:
+ *    delete:
+ *      summary: Delete the n-th SMS in the last 8 SMS
+ *      description: Difficult endpoint to use because of the stateful nature of the protocol at router's end. This endpoint must be called only after an unfiltered call to GET /sms/outbox.
+ *      tags: [SMS]
+ *      parameters:
+ *        - name: "smsOrderNumber"
+ *          in: "path"
+ *          description: SMS order number in the max 8 SMS returned from /sms/outbox. It is not the SMS id.". First is 1 not 0. Range is 1 to 8 included.
+ *          required: true
+ *          type: "integer"
  */
 
 import express from 'express';
@@ -302,6 +313,26 @@ router.post('/outbox', async function (req, res) {
     .catch((exception) => {
       res.status(500).json({status: 500, exception: {name: exception.name, message: exception.message}});
     });
+});
+
+router.delete('/outbox/:smsOrderNumber(\\d+)', async function (req, res) {
+  const client = req.app.get('router_client');
+
+  const smsOrderNumber = parseInt(req.params['smsOrderNumber']);
+
+  const payloadDelete = {
+    method: TP_ACT.ACT_DEL,
+    controller: TP_CONTROLLERS.LTE_SMS_SENDMSGENTRY,
+    stack: smsOrderNumber + ',0,0,0,0,0',
+  };
+
+  client.execute(payloadDelete)
+  .then((response) => {
+    res.json({status: 200, data: response.data});
+  })
+  .catch((exception) => {
+    res.status(500).json({status: 500, exception: {name: exception.name, message: exception.message}});
+  });
 });
 
 export default router;
