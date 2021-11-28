@@ -23,7 +23,7 @@
  *            description: SMS content
  *          receivedTime:
  *            type: datetime
- *            description: Date and time of receiption
+ *            description: Date and time of reception
  *          unread:
  *            type: boolean
  *            description: Whether the SMS is marked unread
@@ -167,7 +167,7 @@
  *  /sms/outbox/{smsOrderNumber}:
  *    delete:
  *      summary: Delete the n-th SMS in the last 8 SMS
- *      description: Difficult endpoint to use because of the stateful nature of the protocol at router's end. This endpoint must be called only after an unfiltered call to GET /sms/outbox.
+ *      description: Difficult endpoint to use because of the stateful nature of the protocol at router's end. This endpoint must be called only after a call to GET /sms/outbox.
  *      tags: [SMS]
  *      parameters:
  *        - name: "smsOrderNumber"
@@ -327,12 +327,12 @@ router.delete('/outbox/:smsOrderNumber(\\d+)', async function (req, res) {
   };
 
   client.execute(payloadDelete)
-  .then((response) => {
-    res.json({status: 200, data: response.data});
-  })
-  .catch((exception) => {
-    res.status(500).json({status: 500, exception: {name: exception.name, message: exception.message}});
-  });
+    .then((response) => {
+      res.json({status: 200, data: response.data});
+    })
+    .catch((exception) => {
+      res.status(500).json({status: 500, exception: {name: exception.name, message: exception.message}});
+    });
 });
 
 export default router;

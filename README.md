@@ -161,7 +161,7 @@ curl -vv smtp://127.0.0.1:1025 --mail-rcpt 123456789@smtp2sms.local --upload-fil
 ## Common errors
 
 HTTP 403 while sending SMS or using API bridge
-: You might want to double check that the password supplied is correct and that you call the script from the same network/subnet as the router.
+: You might want to double-check that the password supplied is correct and that you call the script from the same network/subnet as the router.
 
 ## Development and debugging the router's protocol
 

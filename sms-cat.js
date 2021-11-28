@@ -66,7 +66,7 @@ class SmsPoller {
         continueWhile = false;
       } catch(exception) {
         // catch network errors
-        logger.error("Error while connecting, retrying in 10 secondes. " + exception.message);
+        logger.error("Error while connecting, retrying in 10 seconds. " + exception.message);
         // wait 10 seconds
         await new Promise(resolve => setTimeout(resolve, 10000));
       }

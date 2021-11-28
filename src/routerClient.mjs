@@ -93,7 +93,7 @@ class RouterClient {
   }
 
   /**
-   * Configure RSA encryption (for authentications) and generate local AES key (for remote commands encryptions)
+   * Configure RSA encryption (for authentications) and generate local AES key (for remote commands encryption)
    *
    * @param {*} encryptionSettings 
    */
