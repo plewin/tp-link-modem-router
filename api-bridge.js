@@ -61,7 +61,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://${config.api_listen_host}:${config.api_listen_port}/api/v1`
+        url: `http://${config.api_host}:${config.api_listen_port}/api/v1`
       }
     ]
   },
